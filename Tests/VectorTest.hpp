@@ -6,9 +6,9 @@
 #define TENSOR_VECTORTEST_HPP
 #include "../TensorMath//Vector.hpp"
 #include "gtest/gtest.h"
+//tests for vector class
+using namespace TensorMath;
 
-    using namespace TensorMath;
-    //tests for vector class
     //Comparison test(Asserts since these are required for every other test):
     TEST(VectorTest, comparison){
         Vector a = {0,1,2};
@@ -21,7 +21,6 @@
         a = {3.5,3.5,3.5};
         EXPECT_TRUE(a == 3.5) << "scalar equals failed";
     }
-
 
     //tests for creating vectors and assigning them
     TEST(VectorTest, general_operations){
@@ -52,12 +51,11 @@
 
     //tests for assigning values
     TEST(VectorTest, value_changes){
-        //test value changes
         Vector v {1,2,3};
         const Vector expected = {1,2,3};
         v[0] = v.getValue(0);
         v[1] = v[1];
-        v.setValues({v.x(),v[1],v[2]});
+        v.setValues({v.x(),v.y(),v.z()});
         EXPECT_TRUE(v == expected) << "value changes failed" << v << expected;
     }
 
@@ -83,6 +81,80 @@
         EXPECT_TRUE(test == expected) << "scalar multiplication failed" << expected << test;
     }
 
-    //vector operations, vector utilities
+    //test vector to vector operations
+    TEST(VectorTest, vector_arithmatic){
+        //the expected value is always the same, operations should undo each other
+        const Vector expected = {1,2,3};
+        //test operations using 3d vectors
+        Vector a {1,2,3};
+        Vector b {5.22,3.12,2.0};
+        a += b;
+        a -= b;
+        a = a + b;
+        a = a - b;
+        EXPECT_TRUE(a == expected) << "vector addition failed" << expected << a;
+        a *= b; //multiplication and division
+        a /= b;
+        a = a * b;
+        a = a / b;
+        EXPECT_TRUE(a == expected) << "vector multiplication failed" << expected << a;
+    }
+
+    //test additional functionality
+    TEST(VectorTest, vector_utilities){
+        //test vector length
+        double length_value = Vector{5, 0}.length();
+        EXPECT_DOUBLE_EQ(length_value , 5.0);
+        length_value = Vector{5, 0, 0, 0, 0, 0, 0}.length();
+        EXPECT_DOUBLE_EQ(length_value , 5.0);
+        length_value = Vector{1, 1, 1, 1}.length();
+        EXPECT_DOUBLE_EQ(length_value , 2.0);
+        length_value = Vector{4, 3}.length();
+        EXPECT_DOUBLE_EQ(length_value , 5.0);
+
+        //Test normalization
+        Vector unit_vector = Vector{4,3}.normalized();
+        Vector expected_unit_vector = Vector{4.0/5.0,3.0/5.0};
+        EXPECT_TRUE(unit_vector == expected_unit_vector);
+
+        //test getting dimensions
+        EXPECT_EQ(unit_vector.getDim(), 2);
+
+        //test dot product
+        double dot_value = Vector{2,2}.dotProduct(Vector{1,1}); //simple
+        EXPECT_DOUBLE_EQ(dot_value,4);
+        dot_value = Vector{7,0,-2}.dotProduct(Vector{1,-1,4}); //complex
+        EXPECT_DOUBLE_EQ(dot_value,-1);
+        dot_value = Vector{0,0.1,0.2,0.3}.dotProduct(Vector{0.3,0.2,0.1,0}); //decimal
+        EXPECT_DOUBLE_EQ(dot_value,0.04);
+
+        //test distance
+        double dist = Vector{0,0,0}.distance(Vector{0,0,0});
+        EXPECT_DOUBLE_EQ(dist,0);
+        dist = Vector{5,0}.distance(Vector{1,0});
+        EXPECT_DOUBLE_EQ(dist,4);
+        dist = Vector{3,2,0}.distance(Vector{-1,-1,0});
+        EXPECT_DOUBLE_EQ(dist,5);
+
+
+        //min and max
+        Vector a = {50,-10,0,5};
+        Vector b = {-40,30,0,10};
+        Vector min_expected{-40,-10,0,5};
+        Vector max_expected{50,30,0,10};
+        EXPECT_TRUE(a.min(b) == min_expected);
+        EXPECT_TRUE(b.min(a) == min_expected); //should be interchangeable
+        EXPECT_TRUE(a.max(b) == max_expected);
+        EXPECT_TRUE(b.max(a) == max_expected);
+
+        //test resizing vectors
+        Vector big = {1,2,3};
+        Vector small = {1,2};
+        Vector bigger = {1,2,3,0};
+        Vector small_offset = {2,3};
+        EXPECT_TRUE(big.resized(0, 2) == small);
+        EXPECT_TRUE(big.resized(0, 4) == bigger);
+        EXPECT_TRUE(big.resized(1, 3) == small_offset);
+    }
 
 #endif //TENSOR_VECTORTEST_HPP

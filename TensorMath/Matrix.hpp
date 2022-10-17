@@ -38,6 +38,27 @@ namespace TensorMath {
             assert(x < m_width);//check if in bounds
             (*(m_data[x]))[y] = value;
         }
+        //create a null matrix, all zero values
+        void setZero(){
+            for (int y = 0; y < m_height; ++y) {
+                for (int x = 0; x < m_width; ++x) {
+                    setValue(x,y,0);
+                }
+            }
+        }
+        //create an identity matrix, diagonal 1 values with others being zero
+        void setIdentity(){
+            for (int y = 0; y < m_height; ++y) {
+                for (int x = 0; x < m_width; ++x) {
+                    if(x == y){
+                        setValue(x,y,1);
+                    }else{
+                        setValue(x,y,0);
+                    }
+                }
+            }
+        }
+
         //fill the matrix from an array
         //in standard left right then next row fashion
         void fillArray(std::vector<double> data){
@@ -69,6 +90,9 @@ namespace TensorMath {
             return *m_data[x]; } //get vector using brackets
         Vector &operator[](int x) {  assert(x < m_width); //check if in bounds
             return *m_data[x]; } //modify vector with brackets
+            //todo multiplication and adding
+
+            //todo define cuda, cuda array
 
         //PRINTING
         //make Matrix into string
