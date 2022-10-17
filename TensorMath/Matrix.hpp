@@ -11,7 +11,7 @@ namespace TensorMath {
     //matrix library for doubles
     class Matrix {
     public:
-
+//todo add TRS
         //CONSTRUCTORS
         //matrix of width and height, zero initialized
         Matrix(int w, int h) : m_width(w) , m_height(h){
