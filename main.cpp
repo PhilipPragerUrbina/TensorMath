@@ -12,13 +12,8 @@ int main() {
 
 
 
-
-
-    Matrix m(2,2);
-    m[0][0]=2;
-    m[1][0]=2;
   //  m[1].setZero();
-    std::cout << m;
+
 
    // std::cout << v + b;
 
