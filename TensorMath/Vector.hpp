@@ -61,13 +61,14 @@ namespace TensorMath {
 
 
         //COMPARISON
-            bool equalsScalar(const double &scalar, double epsilon = std::numeric_limits<double>::epsilon()) const {
+            bool equalsScalar(const double &scalar, double epsilon = std::numeric_limits<double>::epsilon()* 10.0) const {
                 for (int i = 0; i < m_dimensions; ++i) { if (!doubleEquals(m_data[i], scalar, epsilon)) { return false; }}
                 return true;
             } //compare to scalar value, using epsilon for reliability
-            bool equals(const Vector &other, double epsilon = std::numeric_limits<double>::epsilon()) const {
+            bool equals(const Vector &other, double epsilon = std::numeric_limits<double>::epsilon()* 10.0) const {
                 if (other.m_dimensions != m_dimensions) { return false; }//not same size
-                for (int i = 0; i < m_dimensions; ++i) { if (!doubleEquals(m_data[i], other[i], epsilon)) { return false; }}
+                for (int i = 0; i < m_dimensions; ++i) { if (!doubleEquals(m_data[i], other[i], epsilon)) {
+                    return false; }}
                 return true;
             } //compare to other vector, using epsilon for reliability
 
@@ -174,6 +175,13 @@ namespace TensorMath {
                 }
                 return out;
             }
+            Vector operator-() const { //negating
+                Vector out(m_dimensions);
+                for (int i = 0; i < m_dimensions; ++i) {
+                    out[i] = -m_data[i];
+                }
+                return out;
+            }
             void operator-=(const Vector &other) {
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 for (int i = 0; i < m_dimensions; ++i) {
@@ -268,7 +276,7 @@ namespace TensorMath {
                 }
                 return out;
             }    //return a resized Vector(including start, not including end). Non-existent values will be 0.
-
+            //todo rotation
 
         //PRINTING
             friend auto operator<<(std::ostream &os, Vector const &v) -> std::ostream & {
@@ -283,7 +291,7 @@ namespace TensorMath {
     private:
         int m_dimensions; //how many dimensions
         double *m_data; //actual data
-        static bool doubleEquals(double a, double b, double epsilon = std::numeric_limits<double>::epsilon()) { //uses epsilon for reliable comparison
+        static bool doubleEquals(double a, double b, double epsilon) { //uses epsilon for reliable comparison
             return std::fabs(b - a) < epsilon;
         }  //helper function for comparison
     };

@@ -12,37 +12,42 @@ namespace TensorMath {
     class Matrix {
     public:
         //CONSTRUCTORS
-            //matrix of width and height, zero initialized
             Matrix(int w, int h) : m_width(w) , m_height(h){
                 initialize();
-            }
-            //square matrix
+            } //matrix of width and height, zero initialized
             Matrix(int w): m_width(w) , m_height(w) {
                 initialize();
-            }
-            //copy constructor
+            }   //square matrix
+            Matrix(const Vector&vec){
+                m_width = vec.getDim();
+                m_height = 1;//flat
+                initialize();
+                for (int x = 0; x < m_width; ++x) {
+                    setValue(x,0,vec[x]); //copy over
+                }
+            } //create flat matrix from vector(for conversions)
             Matrix(const Matrix &other) : Matrix(other.m_width, other.m_height){
                 for (int y = 0; y < m_height; ++y) {
                     for (int x = 0; x < m_width; ++x) {
                         setValue(x,y,other.getValue(x,y));
                     }
                 }
-            }
-            //destructor for clean up
+            }   //copy constructor
+            //todo add TRS constructor and getter
             ~Matrix(){
                 for (int i = 0; i < m_width; ++i) {
                     delete m_data[i]; //clean up vectors
                 }
                 delete[] m_data;
-            }
+            }   //destructor for clean up
 
         //SETTERS AND GETTERS
             double getValue(int x, int y) const{
-                assert(x < m_width);//check if in bounds
+                assert(x < m_width && y < m_height);//check if in bounds
                 return m_data[x]->getValue(y);
             }//get a double value at coordinates
             void setValue(int x, int y, double value) { //
-                assert(x < m_width);//check if in bounds
+                assert(x < m_width && y < m_height);//check if in bounds
                 (*(m_data[x]))[y] = value;
             } //set a double value at coordinates
             void setZero(){
@@ -63,12 +68,10 @@ namespace TensorMath {
                     }
                 }
             }   //create an identity matrix, diagonal 1 values with others being zero
-            //fill the matrix from an array
-            //in standard left right then next row fashion
             void fillArray(std::vector<double> data){
                 int counter = 0;
-                for (int y = 0; y < m_height; ++y) {
-                    for (int x = 0; x < m_width; ++x) {
+                for (int y = 0; y < m_height; ++y) { //go one row at a time
+                    for (int x = 0; x < m_width; ++x) { //fill in values left to right
                         setValue(x,y,data[counter]);
                         counter++;
                         if(counter == data.size()){
@@ -76,8 +79,7 @@ namespace TensorMath {
                         }
                     }
                 }
-            }
-            //get array, inverse of fill array. Useful for serialization.
+            }      //fill the matrix from an array in standard left right then next row fashion
             std::vector<double> getArray(){
                 std::vector<double> output;
                 for (int y = 0; y < m_height; ++y) {
@@ -86,15 +88,34 @@ namespace TensorMath {
                     }
                 }
                 return output;
-            }
-            //get a vector of the row rather than column
+            }   //get array, inverse of fill array. Useful for serialization.
+            Vector getColumn(int x)const{
+                assert(x < m_width); //check bounds
+                return *m_data[x];
+            }    //get a vector from matrix
             Vector getRow(int y)const{
-                Vector out (m_width);
+                assert(y < m_height); //check bounds
+                Vector out (m_width); //new vector since data is stored in other ordination
                 for (int x = 0; x < m_width; ++x) {
-                    out[x] = getValue(x, y);
+                    out[x] = getValue(x, y); //fill vector
                 }
                 return out;
-            }
+            }   //get a vector of the row rather than column
+            int getHeight() const {return m_height;} //get matrix height(# of rows)
+            int getWidth() const {return m_width;} //get matrix width
+
+       //COMPARISON
+            bool equals(const Matrix& other, double epsilon  = std::numeric_limits<double>::epsilon()* 10.0) const {
+                if(m_width != other.getWidth() || m_height != other.getHeight()){
+                    return false; //different dimensions
+                }
+                for (int x = 0; x < m_width; ++x) {
+                    if(!other[x].equals(getColumn(x), epsilon)){ //compare vectors
+                        return false;
+                    };
+                }
+                return true;
+            } //compare two matrices based on an epsilon for floating point values
 
         //OPERATORS
             //allows matrix[x][y] to work, returns a vector
@@ -102,10 +123,9 @@ namespace TensorMath {
                 return *m_data[x]; } //get vector using brackets
             Vector &operator[](int x) {  assert(x < m_width); //check if in bounds
                 return *m_data[x]; } //modify vector with brackets
-            //multiply two matrices
             Matrix operator * (const Matrix& other) const {
                 assert(m_width == other.m_height); //number of columns in a must be equal to # of rows in b
-                Matrix out(other.m_width,m_height); //same number of rows as first
+                Matrix out(other.getWidth(),m_height); //create new matrix to output
                 for (int x = 0; x < out.m_width; ++x) {
                     for (int y = 0; y < out.m_height; ++y) {
                         Vector a = getRow(y);
@@ -114,55 +134,64 @@ namespace TensorMath {
                     }
                 }
                 return out;
-            }
-            //add two matrices
-            //multiply two matrices todo functions not just operators for these
+            }   //multiply two matrices todo optimize this
             Matrix operator + (const Matrix& other) const {
-                assert(m_width == other.m_width);
-                Matrix out(m_width,m_height); //same size
+                assert(m_width == other.m_width && other.m_height == m_height); //must be same size
+                Matrix out(m_width,m_height); //output matrix
                 for (int x = 0; x < out.m_width; ++x) {
-                    out[x] = other[x]+ *m_data[x]; //add the vectors, therefore each value to the corresponding one
+                    out[x] = getColumn(x) + other[x] ; //add the vectors
                 }
                 return out;
-            }
-
-            //todo TRS
-            //todo comparison
-            //todo define cuda, cuda array
-
-        //PRINTING
-        //make Matrix into string
-        std::string toString() const {
-            std::string out = "";
-            for (int y = 0; y < m_height; ++y) {
-                out +=  "[ ";
-                for (int x = 0; x < m_width; ++x) {
-                    out += std::to_string(getValue(x,y)) + " ";
+            }    //add two matrices
+            Matrix operator - (const Matrix& other) const {
+                assert(m_width == other.m_width && m_height == other.m_height); //must be same size
+                Matrix out(m_width,m_height); //output matrix
+                for (int x = 0; x < out.m_width; ++x) {
+                    out[x] =  getColumn(x) - other[x]; //subtract the vectors
                 }
-                out += "]\n";
-            }
-            return out;
-        }
-        friend auto operator<<(std::ostream &os, Matrix const &m) -> std::ostream & {return os << m.toString();} //standard output overload
+                return out;
+            }   //subtract two matrices
+            bool operator == (const Matrix& other) const {
+                return equals(other);
+            } //equality operator
+            bool operator != (const Matrix& other) const {
+                return !equals(other);
+            } //inequality operator
+            operator Vector() const{
+                return getRow(0); //return first row
+            } //convert flat matrix to vector
 
+       // UTILITIES
+       //todo cuda definition, cuda array helper, cuda version
+       //todo resize
+       //todo random fill
 
+       //PRINTING
+            std::string toString() const {
+                std::string out = "";
+                for (int y = 0; y < m_height; ++y) {
+                    out +=  "[ ";
+                    for (int x = 0; x < m_width; ++x) {
+                        out += std::to_string(getValue(x,y)) + " ";
+                    }
+                    out += "]\n";
+                }
+                return out;
+            } //make Matrix into string(contains newlines)
+            friend auto operator<<(std::ostream &os, Matrix const &m) -> std::ostream & {return os << m.toString();} //standard output overload
 
     private:
-        //dimensions
-        int m_width;
+        int m_width;   //dimensions
         int m_height;
-        Vector **m_data;   //actual data(contained in multiple vector pointers)
-        //each column is a vector(top down)
+        Vector **m_data;  //actual data(contained in multiple vector pointers) each column is a vector(top down)
 
-        //initialize the matrix
         void initialize(){
             m_data = new Vector*[m_width];
             for (int i = 0; i < m_width; ++i) {
                 m_data[i] = new Vector(m_height); //create vectors(columns)
                 //vectors are 0 initialized by default
             }
-        }
-
+        }  //initialize the matrix with vectors
 
     };
 
