@@ -105,7 +105,7 @@ namespace TensorMath {
             int getWidth() const {return m_width;} //get matrix width
 
        //COMPARISON
-            bool equals(const Matrix& other, double epsilon  = std::numeric_limits<double>::epsilon()* 10.0) const {
+            bool equals(const Matrix& other, double epsilon  = std::numeric_limits<double>::epsilon()*10) const {
                 if(m_width != other.getWidth() || m_height != other.getHeight()){
                     return false; //different dimensions
                 }
@@ -134,7 +134,7 @@ namespace TensorMath {
                     }
                 }
                 return out;
-            }   //multiply two matrices todo optimize this
+            }   //multiply two matrices todo optimize this https://coffeebeforearch.github.io/2020/06/23/mmul.html#:~:text=Matrix%20multiplication%20is%20an%20incredibly,multi%2Dcore%20CPU%20or%20GPU.
             Matrix operator + (const Matrix& other) const {
                 assert(m_width == other.m_width && other.m_height == m_height); //must be same size
                 Matrix out(m_width,m_height); //output matrix
@@ -164,7 +164,8 @@ namespace TensorMath {
        // UTILITIES
        //todo cuda definition, cuda array helper, cuda version
        //todo resize
-       //todo random fill
+       //todo random  fill
+       //todo constant size version
 
        //PRINTING
             std::string toString() const {

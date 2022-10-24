@@ -61,11 +61,11 @@ namespace TensorMath {
 
 
         //COMPARISON
-            bool equalsScalar(const double &scalar, double epsilon = std::numeric_limits<double>::epsilon()* 10.0) const {
+            bool equalsScalar(const double &scalar, double epsilon = std::numeric_limits<double>::epsilon()*10) const {
                 for (int i = 0; i < m_dimensions; ++i) { if (!doubleEquals(m_data[i], scalar, epsilon)) { return false; }}
                 return true;
             } //compare to scalar value, using epsilon for reliability
-            bool equals(const Vector &other, double epsilon = std::numeric_limits<double>::epsilon()* 10.0) const {
+            bool equals(const Vector &other, double epsilon = std::numeric_limits<double>::epsilon()*10) const {
                 if (other.m_dimensions != m_dimensions) { return false; }//not same size
                 for (int i = 0; i < m_dimensions; ++i) { if (!doubleEquals(m_data[i], other[i], epsilon)) {
                     return false; }}
@@ -291,9 +291,10 @@ namespace TensorMath {
     private:
         int m_dimensions; //how many dimensions
         double *m_data; //actual data
-        static bool doubleEquals(double a, double b, double epsilon) { //uses epsilon for reliable comparison
-            return std::fabs(b - a) < epsilon;
-        }  //helper function for comparison
+        inline static bool doubleEquals(double a, double b, double epsilon) {
+            return (std::fabs(a - b) <= epsilon) || std::fabs(a - b) <= (epsilon * std::fmax(std::fabs(a), std::fabs(b)));
+        } //helper function for comparing two floating point values: https://embeddeduse.com/2019/08/26/qt-compare-two-floats/
+
     };
 
 

@@ -47,11 +47,11 @@ namespace TensorMath {
             double w() const { return getValue(3); }
 
        //COMPARISON
-            bool equalsScalar(const double &scalar, double epsilon = std::numeric_limits<double>::epsilon()* 10.0) const {
+            bool equalsScalar(const double &scalar, double epsilon = std::numeric_limits<double>::epsilon()*10) const {
                 for (int i = 0; i < dimensions; ++i) { if (!doubleEquals(m_data[i], scalar, epsilon)) { return false; }}
                 return true;
             } //compare to scalar value, using epsilon for reliability
-            bool equals(const FixedVector &other, double epsilon = std::numeric_limits<double>::epsilon()* 10.0) const {
+            bool equals(const FixedVector &other, double epsilon = std::numeric_limits<double>::epsilon()*10) const {
                 if (other.getDim() != dimensions) { return false; }//not same size
                 for (int i = 0; i < dimensions; ++i) { if (!doubleEquals(m_data[i], other[i], epsilon)) { return false; }}
                 return true;
@@ -197,6 +197,8 @@ namespace TensorMath {
             bool operator!=(const FixedVector<dimensions> &other) const { //comparison
                 return !equals(other);
             }
+            //todo https://developer.nvidia.com/cuda-math-library cuda version
+            //todo simplify where possible
 
         //UTILITIES
         double length() const {
@@ -248,9 +250,9 @@ namespace TensorMath {
 
     private:
         double m_data[dimensions]; //actual data
-        static bool doubleEquals(double a, double b, double epsilon) { //uses epsilon for reliable comparison
-            return std::fabs(b - a) < epsilon;
-        }  //helper function for comparison
+        inline static bool doubleEquals(double a, double b, double epsilon) {
+            return (std::fabs(a - b) <= epsilon) || std::fabs(a - b) <= (epsilon * std::fmax(std::fabs(a), std::fabs(b)));
+        } //helper function for comparing two floating point values: https://embeddeduse.com/2019/08/26/qt-compare-two-floats/
 
     };
 

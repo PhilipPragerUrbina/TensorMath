@@ -13,7 +13,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Google_Tests VectorTest.hpp Test_Main.cpp MatrixTest.hpp FixedVectorTest.hpp)
+add_executable(Google_Tests Test_Main.cpp VectorTest.hpp MatrixTest.hpp FixedVectorTest.hpp)
 target_link_libraries(Google_Tests TensorMath_lib)
 target_link_libraries(Google_Tests gtest gtest_main GTest::gtest_main)
 
