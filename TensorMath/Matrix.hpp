@@ -9,6 +9,7 @@
 
 namespace TensorMath {
     //matrix library for doubles
+    //Contains assertions for things like mismatched vector sizes(Make sure define NDEBUG for max performance)
     class Matrix {
     public:
         //CONSTRUCTORS
@@ -46,7 +47,7 @@ namespace TensorMath {
                 assert(x < m_width && y < m_height);//check if in bounds
                 return m_data[x]->getValue(y);
             }//get a double value at coordinates
-            void setValue(int x, int y, double value) { //
+            void setValue(int x, int y, double value) {
                 assert(x < m_width && y < m_height);//check if in bounds
                 (*(m_data[x]))[y] = value;
             } //set a double value at coordinates

@@ -5,11 +5,13 @@
 #ifndef TENSORMATH_FIXEDVECTOR_HPP
 #define TENSORMATH_FIXEDVECTOR_HPP
 #include "Vector.hpp"
-//Vector with constant size for easy serialization
+
 namespace TensorMath {
+
+    //Vector with constant size for easy serialization
+    //Contains assertions for things like mismatched vector sizes(Make sure define NDEBUG for max performance)
     template<int dimensions>
     class FixedVector {
-
     public:
         //CONSTRUCTORS
             FixedVector() {
@@ -39,7 +41,7 @@ namespace TensorMath {
                 assert(i < dimensions); //index out of vector range
                 return m_data[i];
             } //get a value
-            int getDim() const { return dimensions; } //get num dimensions
+            constexpr int getDim() const { return dimensions; } //get num dimensions
             //get by names
             double x() const { return getValue(0); }
             double y() const { return getValue(1); }
@@ -255,6 +257,11 @@ namespace TensorMath {
         } //helper function for comparing two floating point values: https://embeddeduse.com/2019/08/26/qt-compare-two-floats/
 
     };
+
+    //helper names(easier typing for common uses)
+    typedef FixedVector<3> Vector3;// 3d vector
+    typedef FixedVector<2> Vector2;//2d vector
+
 
 }
 #endif //TENSORMATH_FIXEDVECTOR_HPP
