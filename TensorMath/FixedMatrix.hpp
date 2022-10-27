@@ -28,7 +28,7 @@ namespace TensorMath {
                         setValue(x,0,vec[x]); //copy over
                     }
                 } //create flat matrix from vector(for conversions)
-
+                //todo add TRS
         //SETTERS AND GETTERS
             double getValue(int x, int y) const{
                 assert(x < width && y < height);//check if in bounds
@@ -91,6 +91,14 @@ namespace TensorMath {
             }   //get a vector of the row rather than column
             static constexpr int getHeight()  {return height;} //get matrix height(# of rows)
             static constexpr int getWidth()  {return width;} //get matrix width
+            void randomFill(double  min, double  max){
+                for (int x = 0; x < width; ++x) {
+                    for (int y = 0; y < height; ++y) {
+                        double random_value = min + ((double)rand() / RAND_MAX) * (max-min);
+                        setValue(x,y,random_value);
+                    }
+                }
+            } //fill the matrix with random floating point values using rand() between two bounds
 
         //COMPARISON
             bool equals(const FixedMatrix& other, double epsilon = std::numeric_limits<double>::epsilon()*10) const {

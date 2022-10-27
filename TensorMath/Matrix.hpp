@@ -34,7 +34,6 @@ namespace TensorMath {
                     }
                 }
             }   //copy constructor
-            //todo add TRS constructor and getter
             ~Matrix(){
                 for (int i = 0; i < m_width; ++i) {
                     delete m_data[i]; //clean up vectors
@@ -163,11 +162,24 @@ namespace TensorMath {
             } //convert flat matrix to vector
 
        // UTILITIES
-       //todo cuda definition, cuda array helper, cuda version
-       //todo resize
-       //todo random  fill
-       //todo constant size version
-
+       void randomFill(double  min, double  max){
+           for (int x = 0; x < m_width; ++x) {
+               for (int y = 0; y < m_height; ++y) {
+                   double random_value = min + ((double)rand() / RAND_MAX) * (max-min);
+                   setValue(x,y,random_value);
+               }
+           }
+        } //fill the matrix with random floating point values using rand() between two bounds
+       //todo cuda array helper and cuda version, using and interoperating with cuda math
+       Matrix resized(int w, int h) const{
+            Matrix new_matrix(w,h); //create new matrix of size
+           for (int x = 0; x < std::min(m_width, w); ++x) { //use the smallest size
+               for (int y = 0; y < std::min(m_height, h); ++y) {
+                   new_matrix[x][y] = getValue(x,y); //copy over data
+               }
+           }
+           return new_matrix;
+        } //get a smaller or bigger version of the matrix. New values are set to 0.
        //PRINTING
             std::string toString() const {
                 std::string out = "";

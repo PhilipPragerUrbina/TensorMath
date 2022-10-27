@@ -42,6 +42,23 @@ TEST(MatrixTest, matrix_comparison){
 
 }
 
+TEST(MatrixTest, matrix_resize){
+    Matrix original(2,2);
+    original.fillArray({2.0,4.5,4.2,0});
+    //test resizing a matrix to be larger
+    Matrix larger = original.resized(3,4);
+    EXPECT_EQ(larger.getWidth(),3); //check dimensions
+    EXPECT_EQ(larger.getHeight(),4);
+    EXPECT_DOUBLE_EQ(larger[0][0],2.0); //check an original value
+    EXPECT_DOUBLE_EQ(larger[2][3],0); //check that new values are 0
+    //test resizing a matrix to be smaller
+    Matrix smaller = original.resized(1,1);
+    EXPECT_EQ(smaller.getWidth(),1); //check dimensions
+    EXPECT_EQ(smaller.getHeight(),1);
+    EXPECT_DOUBLE_EQ(smaller[0][0],2.0); //check the original value
+
+}
+
 TEST(MatrixTest, matrix_add){
     //set up two 4x4 matrices
     Matrix a(2,2);
