@@ -215,6 +215,12 @@ namespace TensorMath {
             }
             return sum;
         } //Get the dot product of two vectors. Combine two vectors into single value.
+        FixedVector<3> crossProduct(const FixedVector<3> &other) const {
+            return FixedVector<3>{getValue(1) * other[2] - getValue(2) * other[1],
+                        getValue(2) * other[0] - getValue(0) * other[2],
+                        getValue(0) * other[1] - getValue(1) * other[0]};
+        } //Get the cross product of two vectors. Only for 3d vectors. (Right-hand rule)
+
         double distance(const FixedVector<dimensions> &other) const {
             double sum = 0; //sqrt((x2-x1)^2 + (y2-y1)^2...)
             for (int i = 0; i < dimensions; ++i) {
@@ -225,6 +231,10 @@ namespace TensorMath {
         FixedVector<dimensions> normalized() const {
             return *this / length();  //(1/||v||) * v = unit v
         } //get the normalized(unit) vector. The direction of the vector.
+        FixedVector<dimensions>  inverse() const {
+            FixedVector<dimensions> one(1.0);
+            return one / *this;
+        } //get 1.0/vector. Useful for ray tracing.
         FixedVector<dimensions> min(const FixedVector<dimensions> &other) const {
             FixedVector<dimensions> out; //vector to return
             for (int i = 0; i < dimensions; ++i) {

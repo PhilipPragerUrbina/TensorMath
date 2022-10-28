@@ -246,6 +246,12 @@ namespace TensorMath {
                 }
                 return std::sqrt(sum);
             } //get the distance between two vectors.
+
+            Vector inverse() const {
+                Vector one(m_dimensions);
+                one.setScalar(1.0);
+                return one / *this;
+            } //get 1.0/vector. Useful for ray tracing.
             Vector normalized() const {
                 return *this / length();  //(1/||v||) * v = unit v
             } //get the normalized(unit) vector. The direction of the vector.
