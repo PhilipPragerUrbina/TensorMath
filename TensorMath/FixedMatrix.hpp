@@ -27,7 +27,7 @@ namespace TensorMath {
                     for (int x = 0; x < width; ++x) {
                         setValue(x,0,vec[x]); //copy over
                     }
-                } //create flat matrix from vector(for conversions)
+            } //create flat matrix from vector(for conversions)
                 //todo add TRS
         //SETTERS AND GETTERS
             double getValue(int x, int y) const{

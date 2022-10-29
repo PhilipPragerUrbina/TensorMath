@@ -200,7 +200,6 @@ namespace TensorMath {
                 return !equals(other);
             }
             //todo https://developer.nvidia.com/cuda-math-library cuda version
-            //todo simplify where possible
 
         //UTILITIES
         double length() const {
