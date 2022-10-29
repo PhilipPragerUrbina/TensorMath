@@ -1,5 +1,5 @@
 # Vectors
-Vectors are usually used to represent a direction or position in N dimensions. Contains N amount fo double components.
+Vectors are usually used to represent a direction or position in N dimensions. Contains N amount of double components.
 
 ### ⚠ Warning ⚠
 > These vectors have their size defined at runtime, and therefore dynamically allocate memory in a pointer.
@@ -200,7 +200,7 @@ Calls getValue.
 ```c++ 
     double operator[](int i) const
 ```
-#### get dimensions
+#### Get dimensions
 Return the number of dimensions(components) the vector has.
 ```c++ 
     int getDim() const
