@@ -282,6 +282,10 @@ namespace TensorMath {
                 }
                 return out;
             }    //return a resized Vector(including start, not including end). Non-existent values will be 0.
+            Vector reflect(Vector normal) const{
+                assert(normal.m_dimensions == m_dimensions); //Not same size vectors
+                return *this - normal * 2.0 * this->dotProduct(normal) / normal.dotProduct(normal) ;
+             } //https://en.wikipedia.org/wiki/Reflection_(mathematics) , reflect a vector over a normal
             //todo rotation
 
         //PRINTING

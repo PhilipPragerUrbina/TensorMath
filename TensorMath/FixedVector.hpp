@@ -220,7 +220,9 @@ namespace TensorMath {
                         getValue(2) * other[0] - getValue(0) * other[2],
                         getValue(0) * other[1] - getValue(1) * other[0]};
         } //Get the cross product of two vectors. Only for 3d vectors. (Right-hand rule)
-
+        FixedVector<dimensions> reflect( FixedVector<dimensions> normal) const{
+            return *this - normal * 2.0 * this->dotProduct(normal) / normal.dotProduct(normal) ;
+        } //https://en.wikipedia.org/wiki/Reflection_(mathematics) , reflect a vector over a normal
         double distance(const FixedVector<dimensions> &other) const {
             double sum = 0; //sqrt((x2-x1)^2 + (y2-y1)^2...)
             for (int i = 0; i < dimensions; ++i) {

@@ -159,6 +159,12 @@ using namespace TensorMath;
         EXPECT_TRUE(big.resized(0, 2) == small);
         EXPECT_TRUE(big.resized(0, 4) == bigger);
         EXPECT_TRUE(big.resized(1, 3) == small_offset);
+
+        //reflection
+        Vector direction = {2.0,1.0};
+        Vector normal = {0.0,1.0};
+        Vector reflected = {2.0,-1.0};
+        EXPECT_EQ(direction.reflect(normal), reflected);
     }
 
 #endif //TENSOR_VECTORTEST_HPP

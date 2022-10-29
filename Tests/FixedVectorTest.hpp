@@ -151,6 +151,17 @@ using namespace TensorMath;
         EXPECT_TRUE(a.max(b) == max_expected);
         EXPECT_TRUE(b.max(a) == max_expected);
 
+        //cross product
+        Vector3 forward = {1,0,0};
+        Vector3 up = {0,0,1};
+        Vector3 side = {0,1,0};
+        EXPECT_EQ(up.crossProduct(forward),side);
+
+        //reflection
+        Vector2 direction = {2.0,1.0};
+        Vector2 normal = {0.0,1.0};
+        Vector2 reflected = {2.0,-1.0};
+        EXPECT_EQ(direction.reflect(normal), reflected);
 
     }
 
