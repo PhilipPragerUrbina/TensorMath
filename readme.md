@@ -7,10 +7,10 @@ Perfect for small computer graphics, physics, or machine learning projects.
 
 _A little taste:_
 ```c++
-//write your code almost like the equation!
 Vector3 origin{1,2.2,3.24};
 double distance = 3.0;
-Vector3 ray_position = origin + dir.normalized() + distance;
+//write your code almost like the equation!
+Vector3 ray_position = origin + dir.normalized() * distance;
 ```
 >There is a lot more than just this,take a look at  the Docs!  
 
