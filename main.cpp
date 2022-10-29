@@ -5,7 +5,5 @@
 
 int main() {
     using namespace TensorMath;
-
-
     return 0;
 }
