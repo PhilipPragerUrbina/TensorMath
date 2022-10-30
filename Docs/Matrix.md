@@ -1,82 +1,78 @@
-# Vectors
-Vectors are usually used to represent a direction or position in N dimensions. Contains N amount of double components.
+# Matrices
+Matrices are a 2d grid of values. They are composed of multiple vectors. 
 
 ### ⚠ Warning ⚠
-> These vectors have their size defined at runtime, and therefore dynamically allocate memory in a pointer.
-If you are looking for a constant sizes vectors, like Vector3, see _FixedVector_. FixedVector has compile time compatibility checks, and is easier copy(to a GPU for example) or serialize.
+> These Matrices have their size defined at runtime, and therefore dynamically allocate memory in a pointer.
+If you are looking for a constant size Matrices, like Mat4, see _FixedMatrix_. Fixedmatrix has compile time compatibility checks, and is easier copy(to a GPU for example) or serialize.
 
 ### ❗ Notice ❗
-> This class contains assertions for things like mismatched vector sizes. Make sure define NDEBUG for max performance and to remove these assertions for your release build.
+> This class contains assertions for things like mismatched Matrix sizes. Make sure define NDEBUG for max performance and to remove these assertions for your release build.
 
 ## Usage
 ### Include
 ```c++
 //add the library
-#include "TensorMath/Vector.hpp"
+#include "TensorMath/Matrix.hpp"
 ```
 
-### Creating Vectors
+### Creating Matrices
 ```c++
-//create a vector of 4 dimensions
-Vector a(4);
-
-//Create a 3d vector from an initialization list
-Vector b = {2.0,1,-1};
-
-//Create a vector from another vector(copy)
-Vector c = a;
+//create a Matrix with a width of 4, and a height of 2. Zero initialized.
+Matrix a(4,2);
+//Create a Matrix from another matrix
+Matrix b = a;
+//Create a matrix from a vector
+Matrix c(vec);
 ```
-### Setting and Getting Vector values
+### Setting and Getting Matrix values
 ```c++
-//set a vector to a scalar(all components will be this value)
-Vector a(4);
-a = 2; // {2,2,2,2}
+//get and setting double values
+a.setValue(2,3,12.0); //set (2,3) to 12
+a.getValue(2,3);
+a[2][3] = 12;
 
-//set or get specific value
-a[2] = 4.0 + a[1];
+//set to identity or null
+a.setZero();
+a.setIdentity();
 
-//set to other vector(must be same size)
-Vector b = {2,3,4,5};
-a = b;
+//fill with array values from a std::vector
+a.fillArray({2,3,4,5,1,2})
+std::vector<double> arr = a.getArray();
 
-//get a value by name
-double x_val = a.x();
+//get a column from an x value
+Vector c = a[0];
+//get a row from a y value
+Vector r = a.getRow(0);
 ```
-### Vector operations
+### Matrix operations
 ```c++
-//vectors must be same size for operations
-Vector a = b + c / d * e;
-a /= b * c;
-//vectors also have scalar operations
-a = b * 2.0;
-a += 1.0;
+//Matrix multiplication
+Matrix m = a * b;
+//Matrix addition and subtraction
+Matrix l = a - b + c;
+//Matrix times a vector
+Vector transformed = Matrix(vec) * a;
 ```
 ### Comparison
 ```c++
-//compare two vectors
+//compare two Matrices
 if(a == b && a != c){
 }
-//compare vector to scalar
-if(a == 2.0 && a != 1.0){
-    //compares all components to the scalar
-}
-//both above use an epsilon value to reliably compare floating point values
 
 const double epsilon = 0.0001;
-if(a.equals(b,epsilon) || a.equalsScalar(2.0,epsilon)){
+if(a.equals(b,epsilon)){
 //use your own epsilon
 };
 ```
 ### Using Utilities
 ```c++
-double length = a.length();
-Vector normal = a.normalized();
-//There are a lot more utilities , check reference for details
+a.randomFill(-1,2.5); //fill a matrix with random values in a range
+Matrix small = a.resize(3,2); //resize a matrix
 ```
 
 ### Printing
 ```c++
-std::string vec_str = a.toString();
+std::string mat_str = a.toString();
 std::cout << a;
 ```
 
@@ -88,38 +84,38 @@ std::cout << a;
 <tr><td> 
 
 ```c++ 
-Vector vec3(3); //{0,0,0}
+Matrix m(2,3);
 ```
 
 </td><td>
 
 
 ```c++ 
-explicit Vector(int dimensions)
+ explicit Matrix(int w, int h) 
 ```
 
 </td>
 <td>
-Create a new vector of with a size of N dimensions. Asserts that dimensions > 0. Is zero initialized.
+Create a new matrix with a width and height.
 </td>
 </tr>
 <tr>
 <td> 
 
 ```c++ 
-Vector copy_of_other = other;
+Matrix m(4);
 ```
 
 </td>
 <td>
 
 ```c++ 
-Vector(const Vector &other)
+  explicit Matrix(int w)
 ```
 
 </td>
 <td>
-Create a new vector, with the same size and values of another vector. Does not contain any references to other vector.
+Create a square matrix.
 </td>
 
 </tr>
@@ -127,45 +123,93 @@ Create a new vector, with the same size and values of another vector. Does not c
 <td> 
 
 ```c++ 
-Vector vec{1,2,3,4};
-Vector v = {1,2,3,4};
+Matrix m(vec);
 ```
 
 </td>
 <td>
 
 ```c++ 
-Vector(std::initializer_list<double> values)
+ Matrix(const Vector&vec)
 ```
 
 </td>
 <td>
-Creates a new vector from an initializer list of doubles. Will be the size of the list.
+Create a matrix with a height of 1 and a width corresponding to the vector. Copies vector values to matrix.
+</td>
+</tr>
+
+<tr>
+<td> 
+
+```c++ 
+Matrix m = b;
+```
+
+</td>
+<td>
+
+```c++ 
+   Matrix(const Matrix &other)
+```
+
+</td>
+<td>
+Create a matrix from another matrix. Has same width and height, copies over values.
 </td>
 </tr>
 </table>
 
 ### Setters
 #### From list
-Will loop through the list and set as many components as possible to the corresponding values. 
+Will loop through the std::vector and set as many components as possible to the corresponding values.
 
-If values < dimensions, will keep remaining components
+If values < w*h, will keep remaining components
 
-If values > dimensions, will ignore additional values
+If values > w*h, will ignore additional values
+
+Fills from 0 to width for each row, one column at a time(0 to height).
+
+$$\left [ 0,1,2,3,4,5,6,7,8 \right ] \rightarrow \begin{bmatrix}
+0 & 1 & 2\\
+3 & 4 & 5\\
+6 & 7 & 8
+\end{bmatrix}$$
 ```c++ 
    void setValues(std::vector<double> values)
 ```
 
-#### From a scalar
-Will set all components of the vector to the scalar value.
+#### Set a double value
+Set a component at an x and y value to a double value.
+Asserts that x and y are in bounds.
 ```c++ 
-   void setScalar(double scalar)
+   void setValue(int x, int y, double value)
 ```
-#### Null Vector
-Will set all components of the vector to 0.
+#### Null Matrix
+Will set all components of the matrix to 0.
+
+$$\begin{bmatrix}
+0 & 0\\
+0 & 0
+\end{bmatrix}$$
+
 ```c++ 
    void setZero()
 ```
+
+#### Identity Matrix
+Will set all components of the matrix to 0. Then sets diagonal elements to 1.
+
+$$\begin{bmatrix}
+1 & 0\\
+0 & 1
+\end{bmatrix}$$
+```c++ 
+    void setIdentity()
+```
+
+
+
 #### operator []
 Set a specific component by returning a reference to it. Asserts that i < dimensions.
 ```c++ 
@@ -208,7 +252,7 @@ Return the number of dimensions(components) the vector has.
 ```
 ### Comparison
 > Note: The epsilon is used in the formula abs(a-b)<epsilon, to make sure double values are properly compared. std::numeric_limits<double>::epsilon()*10 was found to work for all tested operations.
-> 
+>
 > More Info: https://embeddeduse.com/2019/08/26/qt-compare-two-floats/
 #### Compare to scalar
 Check if all components of the vector are equal to the scalar value,using an epsilon value for reliable floating point comparison.
@@ -222,7 +266,7 @@ Checks whether they have the same size. Then checks if all components are equal,
 ```
 #### operator ==
 Calls the above methods. Const.
-#### operator != 
+#### operator !=
 Calls the above methods, and returns !that. Const.
 
 ### Operations
@@ -242,7 +286,7 @@ Same as above methods, but uses scalar as second value in operations, rather tha
 
 ### Utilities
 #### Length
-Returns the length of the vector. This is the magnitude. 
+Returns the length of the vector. This is the magnitude.
 
 $$\left\| a \right\|=\sqrt{x^2+y^2...}$$
 ```c++ 
