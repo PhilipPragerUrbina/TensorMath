@@ -12,7 +12,7 @@ double distance = 3.0;
 //write your code almost like the equation!
 Vector3 ray_position = origin + dir.normalized() * distance;
 ```
->There is a lot more than just this,take a look at  the Docs!  
+>There is a lot more than just this, take a look at  the Docs!  
 
 Components:
 - Matrices
@@ -36,3 +36,4 @@ Potential Future Features:
 - Templated version(not just doubles)
 - Maximum matrix multiplication optimizations(memory layout, multithreading, chunking, etc)
 
+All of it is under the TensorMath  namespace.

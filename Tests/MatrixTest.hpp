@@ -25,6 +25,20 @@ TEST(MatrixTest, matrix_serialization){
     EXPECT_DOUBLE_EQ(data[3], a[1][1]); //check each value for equality
 }
 
+TEST(MatrixTest, matrix_copy){
+    Matrix a(2,2);
+    a.fillArray({2,1,4,3});
+
+    //test copy constructor
+    Matrix b = a;
+    EXPECT_EQ(a,b); //should have same values
+
+    //test = operator
+    b.fillArray({1,3,4,5});
+    a = b;
+    EXPECT_EQ(a,b); //should have same values
+}
+
 
 TEST(MatrixTest, matrix_comparison){
     Matrix a(2,2); //first matrix

@@ -7,7 +7,7 @@
 
 
 class Tensor {
-
+//not implemented yet
 };
 
 

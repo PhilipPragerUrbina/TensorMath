@@ -13,10 +13,10 @@ namespace TensorMath {
     class Matrix {
     public:
         //CONSTRUCTORS
-            Matrix(int w, int h) : m_width(w) , m_height(h){
+            explicit Matrix(int w, int h) : m_width(w) , m_height(h){
                 initialize();
             } //matrix of width and height, zero initialized
-            Matrix(int w): m_width(w) , m_height(w) {
+            explicit Matrix(int w): m_width(w) , m_height(w) {
                 initialize();
             }   //square matrix
             Matrix(const Vector&vec){
@@ -103,6 +103,15 @@ namespace TensorMath {
             }   //get a vector of the row rather than column
             int getHeight() const {return m_height;} //get matrix height(# of rows)
             int getWidth() const {return m_width;} //get matrix width
+            Matrix &operator=(const Matrix &other) { //assign from other Matrix
+                if (this != &other) {//handle self assignment
+                    assert(other.m_width == m_height); //can not assign different dimensional matrix
+                    for (int i = 0; i < m_width; ++i) {
+                        *m_data[i] = other[i];
+                    }
+                }
+                return *this;
+            }
 
        //COMPARISON
             bool equals(const Matrix& other, double epsilon  = std::numeric_limits<double>::epsilon()*10) const {

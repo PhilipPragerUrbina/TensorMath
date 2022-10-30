@@ -27,6 +27,20 @@ TEST(FixedMatrixTest, matrix_serialization){
 }
 
 
+TEST(FixedMatrixTest, matrix_copy){
+    FixedMatrix<2,2> a;
+    a.fillArray({2,1,4,3});
+
+    //test copy constructor
+    FixedMatrix<2,2> b = a;
+    EXPECT_EQ(a,b); //should have same values
+
+    //test = operator
+    b.fillArray({1,3,4,5});
+    a = b;
+    EXPECT_EQ(a,b); //should have same values
+}
+
 TEST(FixedMatrixTest, matrix_comparison){
     FixedMatrix<2,2> a; //first matrix
     a.fillArray({2.0,4.5,4.2,0});
