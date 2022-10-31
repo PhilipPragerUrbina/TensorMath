@@ -105,7 +105,7 @@ namespace TensorMath {
             int getWidth() const {return m_width;} //get matrix width
             Matrix &operator=(const Matrix &other) { //assign from other Matrix
                 if (this != &other) {//handle self assignment
-                    assert(other.m_width == m_height); //can not assign different dimensional matrix
+                    assert(other.m_width == m_width); //can not assign different dimensional matrix
                     for (int i = 0; i < m_width; ++i) {
                         *m_data[i] = other[i];
                     }

@@ -208,22 +208,16 @@ $$\begin{bmatrix}
     void setIdentity()
 ```
 
-
-
 #### operator []
-Set a specific component by returning a reference to it. Asserts that i < dimensions.
+Get a specific vector(column) from an x value. Asserts that x < width;
 ```c++ 
-   double &operator[](int i)
+    Vector &operator[](int x)
 ```
-#### operator = scalar
-Calls setScalar.
+
+#### operator = Matrix
+Asserts that matrices are the same size. Copies over values by copying over the vectors.
 ```c++ 
-   Vector &operator=(double scalar)
-```
-#### operator = Vector
-Asserts that vectors are the same size. Copies over values.
-```c++ 
-    Vector &operator=(const Vector &other)
+    Matrix &operator=(const Matrix &other)
 ```
 ### Getters
 #### Get a specific component.

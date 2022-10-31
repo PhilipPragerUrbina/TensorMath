@@ -221,9 +221,15 @@ Checks whether they have the same size. Then checks if all components are equal,
     bool equals(const Vector &other, double epsilon = std::numeric_limits<double>::epsilon()*10)
 ```
 #### operator ==
-Calls the above methods. Const.
+Calls the above methods.
+```c++ 
+    bool operator==(const Vector &other) const
+```
 #### operator != 
-Calls the above methods, and returns !that. Const.
+Calls the above methods, and returns not(!) that.
+```c++ 
+    bool operator!=(const Vector &other) const
+```
 
 ### Operations
 #### Operator * + - / vector
