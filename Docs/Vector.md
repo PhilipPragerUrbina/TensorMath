@@ -1,12 +1,12 @@
 # Vectors
-Vectors are usually used to represent a direction or position in N dimensions. Contains N amount of double components.
+Vectors are used to represent a direction or position in N dimensions. Contains a number of floating-point components.
 
 ### ⚠ Warning ⚠
-> These vectors have their size defined at runtime, and therefore dynamically allocate memory in a pointer.
-If you are looking for a constant sizes vectors, like Vector3, see _FixedVector_. FixedVector has compile time compatibility checks, and is easier copy(to a GPU for example) or serialize.
+> Vectors have their size defined at runtime, and therefore dynamically allocate memory.
+If you are looking for constant size vectors, such as Vector3, see _FixedVector_. FixedVector has compile time size compatibility checks, and is easier to copy(to a GPU for example) or serialize.
 
 ### ❗ Notice ❗
-> This class contains assertions for things like mismatched vector sizes. Make sure define NDEBUG for max performance and to remove these assertions for your release build.
+> This class makes assertions for mismatched vector sizes. For maximum performance, define NDEBUG to remove these assertions for your release build.
 
 ## Usage
 ### Include
