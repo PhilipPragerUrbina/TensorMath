@@ -54,10 +54,10 @@ namespace TensorMath {
             } //get a value
             int getDim() const { return m_dimensions; } //get num dimensions
             //get by names
-            double x() const { return getValue(0); }
-            double y() const { return getValue(1); }
-            double z() const { return getValue(2); }
-            double w() const { return getValue(3); }
+            double inline x() const { return getValue(0); }
+            double inline y() const { return getValue(1); }
+            double inline z() const { return getValue(2); }
+            double inline w() const { return getValue(3); }
 
 
         //COMPARISON
@@ -93,55 +93,55 @@ namespace TensorMath {
                 }
                 return *this;
             }   //set to a scalar value with operator
-            Vector &operator=(std::initializer_list<double> values) {
+            Vector inline &operator=(std::initializer_list<double> values) {
                 setValues(std::vector<double>(values));
                 return *this;
             }   //set values from list with operator
             //Scalar operations
-            Vector operator+(const double &scalar) const { //adding
+            Vector inline operator+(const double &scalar) const { //adding
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
                     out[i] = m_data[i] + scalar;
                 }
                 return out;
             }
-            void operator+=(const double &scalar) {
+            void inline operator+=(const double &scalar) {
                 for (int i = 0; i < m_dimensions; ++i) {
                     m_data[i] = m_data[i] + scalar;
                 }
             }
-            Vector operator-(const double &scalar) const { //subtracting
+            Vector inline operator-(const double &scalar) const { //subtracting
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
                     out[i] = m_data[i] - scalar;
                 }
                 return out;
             }
-            void operator-=(const double &scalar) {  //multiplying
+            void inline operator-=(const double &scalar) {  //multiplying
                 for (int i = 0; i < m_dimensions; ++i) {
                     m_data[i] = m_data[i] - scalar;
                 }
             }
-            Vector operator*(const double &scalar) const {
+            Vector inline operator*(const double &scalar) const {
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
                     out[i] = m_data[i] * scalar;
                 }
                 return out;
             }
-            void operator*=(const double &scalar) {
+            void inline operator*=(const double &scalar) {
                 for (int i = 0; i < m_dimensions; ++i) {
                     m_data[i] = m_data[i] * scalar;
                 }
             }
-            Vector operator/(const double &scalar) const { //dividing
+            Vector inline operator/(const double &scalar) const { //dividing
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
                     out[i] = m_data[i] / scalar;
                 }
                 return out;
             }
-            void operator/=(const double &scalar) {
+            void inline operator/=(const double &scalar) {
                 for (int i = 0; i < m_dimensions; ++i) {
                     m_data[i] = m_data[i] / scalar;
                 }
@@ -153,7 +153,7 @@ namespace TensorMath {
                 return !equalsScalar(scalar);
             } //comparison
             //Vector operations
-            Vector operator+(const Vector &other) const { //adding
+            Vector inline operator+(const Vector &other) const { //adding
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
@@ -161,13 +161,13 @@ namespace TensorMath {
                 }
                 return out;
             }
-            void operator+=(const Vector &other) {
+            void inline operator+=(const Vector &other) {
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 for (int i = 0; i < m_dimensions; ++i) {
                     m_data[i] = m_data[i] + other[i];
                 }
             }
-            Vector operator-(const Vector &other) const { //subtracting
+            Vector inline operator-(const Vector &other) const { //subtracting
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
@@ -175,20 +175,20 @@ namespace TensorMath {
                 }
                 return out;
             }
-            Vector operator-() const { //negating
+            Vector inline operator-() const { //negating
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
                     out[i] = -m_data[i];
                 }
                 return out;
             }
-            void operator-=(const Vector &other) {
+            void inline operator-=(const Vector &other) {
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 for (int i = 0; i < m_dimensions; ++i) {
                     m_data[i] = m_data[i] - other[i];
                 }
             }
-            Vector operator*(const Vector &other) const { //multiplying
+            Vector inline operator*(const Vector &other) const { //multiplying
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
@@ -196,13 +196,13 @@ namespace TensorMath {
                 }
                 return out;
             }
-            void operator*=(const Vector &other) {
+            void inline operator*=(const Vector &other) {
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 for (int i = 0; i < m_dimensions; ++i) {
                     m_data[i] = m_data[i] * other[i];
                 }
             }
-            Vector operator/(const Vector &other) const { //dividing
+            Vector inline operator/(const Vector &other) const { //dividing
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 Vector out(m_dimensions);
                 for (int i = 0; i < m_dimensions; ++i) {
@@ -210,7 +210,7 @@ namespace TensorMath {
                 }
                 return out;
             }
-            void operator/=(const Vector &other) {
+            void inline operator/=(const Vector &other) {
                 assert(other.m_dimensions == m_dimensions); //Not same size vectors
                 for (int i = 0; i < m_dimensions; ++i) {
                     m_data[i] = m_data[i] / other[i];

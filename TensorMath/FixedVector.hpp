@@ -54,10 +54,10 @@ namespace TensorMath {
             } //get a value
             constexpr int getDim() const { return dimensions; } //get num dimensions
             //get by names
-            double x() const { return getValue(0); }
-            double y() const { return getValue(1); }
-            double z() const { return getValue(2); }
-            double w() const { return getValue(3); }
+            double inline x() const { return getValue(0); }
+            double inline y() const { return getValue(1); }
+            double inline z() const { return getValue(2); }
+            double inline w() const { return getValue(3); }
 
        //COMPARISON
             bool equalsScalar(const double &scalar, double epsilon = std::numeric_limits<double>::epsilon()*10) const {
@@ -94,50 +94,50 @@ namespace TensorMath {
                 return *this;
             }   //set values from list with operator
             //Scalar operations
-            FixedVector<dimensions> operator+(const double &scalar) const { //adding
+            FixedVector<dimensions> inline operator+(const double &scalar) const { //adding
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = m_data[i] + scalar;
                 }
                 return out;
             }
-            void operator+=(const double &scalar) {
+            void inline operator+=(const double &scalar) {
                 for (int i = 0; i < dimensions; ++i) {
                     m_data[i] = m_data[i] + scalar;
                 }
             }
-            FixedVector<dimensions> operator-(const double &scalar) const { //subtracting
+            FixedVector<dimensions> inline operator-(const double &scalar) const { //subtracting
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = m_data[i] - scalar;
                 }
                 return out;
             }
-            void operator-=(const double &scalar) {  //multiplying
+            void inline operator-=(const double &scalar) {  //multiplying
                 for (int i = 0; i < dimensions; ++i) {
                     m_data[i] = m_data[i] - scalar;
                 }
             }
-            FixedVector<dimensions> operator*(const double &scalar) const {
+            FixedVector<dimensions> inline operator*(const double &scalar) const {
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = m_data[i] * scalar;
                 }
                 return out;
             }
-            void operator*=(const double &scalar) {
+            void inline operator*=(const double &scalar) {
                 for (int i = 0; i < dimensions; ++i) {
                     m_data[i] = m_data[i] * scalar;
                 }
             }
-            FixedVector<dimensions> operator/(const double &scalar) const { //dividing
+            FixedVector<dimensions> inline operator/(const double &scalar) const { //dividing
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = m_data[i] / scalar;
                 }
                 return out;
             }
-            void operator/=(const double &scalar) {
+            void inline operator/=(const double &scalar) {
                 for (int i = 0; i < dimensions; ++i) {
                     m_data[i] = m_data[i] / scalar;
                 }
@@ -149,57 +149,57 @@ namespace TensorMath {
                 return !equalsScalar(scalar);
             } //comparison
             //Vector operations
-            FixedVector<dimensions> operator+(const FixedVector<dimensions> &other) const { //adding
+            FixedVector<dimensions> inline operator+(const FixedVector<dimensions> &other) const { //adding
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = m_data[i] + other[i];
                 }
                 return out;
             }
-            void operator+=(const FixedVector<dimensions> &other) {
+            void inline operator+=(const FixedVector<dimensions> &other) {
                 for (int i = 0; i < dimensions; ++i) {
                     m_data[i] = m_data[i] + other[i];
                 }
             }
-            FixedVector<dimensions> operator-(const FixedVector<dimensions> &other) const { //subtracting
+            FixedVector<dimensions> inline operator-(const FixedVector<dimensions> &other) const { //subtracting
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = m_data[i] - other[i];
                 }
                 return out;
             }
-            FixedVector<dimensions> operator-() const { //negating
+            FixedVector<dimensions> inline operator-() const { //negating
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = -m_data[i];
                 }
                 return out;
              }
-            void operator-=(const FixedVector<dimensions> &other) {
+            void inline operator-=(const FixedVector<dimensions> &other) {
                 for (int i = 0; i < dimensions; ++i) {
                     m_data[i] = m_data[i] - other[i];
                 }
             }
-            FixedVector<dimensions> operator*(const FixedVector<dimensions> &other) const { //multiplying
+            FixedVector<dimensions> inline operator*(const FixedVector<dimensions> &other) const { //multiplying
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = m_data[i] * other[i];
                 }
                 return out;
             }
-            void operator*=(const FixedVector<dimensions> &other) {
+            void inline operator*=(const FixedVector<dimensions> &other) {
                 for (int i = 0; i < dimensions; ++i) {
                     m_data[i] = m_data[i] * other[i];
                 }
             }
-            FixedVector<dimensions> operator/(const FixedVector<dimensions> &other) const { //dividing
+            FixedVector<dimensions> inline operator/(const FixedVector<dimensions> &other) const { //dividing
                 FixedVector<dimensions> out;
                 for (int i = 0; i < dimensions; ++i) {
                     out[i] = m_data[i] / other[i];
                 }
                 return out;
             }
-            void operator/=(const FixedVector<dimensions> &other) {
+            void inline operator/=(const FixedVector<dimensions> &other) {
                 for (int i = 0; i < dimensions; ++i) {
                     m_data[i] = m_data[i] / other[i];
                 }
