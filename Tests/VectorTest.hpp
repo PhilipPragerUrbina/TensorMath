@@ -163,7 +163,7 @@ using namespace TensorMath;
         //abs
         Vector negative = {0,-1.5,-2};
         Vector positive = {0, 1.5,2};
-        EXPECT_EQ(negative,positive);
+        EXPECT_EQ(negative.abs(),positive);
 
         //reflection
         Vector direction = {2.0,1.0};

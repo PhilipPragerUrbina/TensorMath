@@ -154,7 +154,7 @@ using namespace TensorMath;
         //abs
         FixedVector<3> negative = {0,-1.5,-2};
         FixedVector<3> positive = {0, 1.5,2};
-        EXPECT_EQ(negative,positive);
+        EXPECT_EQ(negative.abs(),positive);
 
         //cross product
         Vector3 forward = {1,0,0};
