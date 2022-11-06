@@ -171,7 +171,7 @@ namespace TensorMath {
             } //convert flat matrix to vector
 
 
-       //todo cuda array helper and cuda version, using and interoperating with cuda math
+
        Matrix resized(int w, int h) const{
             Matrix new_matrix(w,h); //create new matrix of size
            for (int x = 0; x < std::min(m_width, w); ++x) { //use the smallest size

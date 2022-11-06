@@ -293,7 +293,6 @@ namespace TensorMath {
                 }
                 return out;
             } //absolute value
-            //todo rotation
 
         //PRINTING
             friend auto operator<<(std::ostream &os, Vector const &v) -> std::ostream & {
