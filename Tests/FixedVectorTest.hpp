@@ -151,6 +151,11 @@ using namespace TensorMath;
         EXPECT_TRUE(a.max(b) == max_expected);
         EXPECT_TRUE(b.max(a) == max_expected);
 
+        //abs
+        FixedVector<3> negative = {0,-1.5,-2};
+        FixedVector<3> positive = {0, 1.5,2};
+        EXPECT_EQ(negative,positive);
+
         //cross product
         Vector3 forward = {1,0,0};
         Vector3 up = {0,0,1};

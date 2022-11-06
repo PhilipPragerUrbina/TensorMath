@@ -24,10 +24,21 @@ namespace TensorMath {
                 for (int i = 0; i < dimensions; ++i) { m_data[i] = other[i]; }
             }  //copy constructor
             FixedVector(std::initializer_list<double> values) {
+            //todo optimize this, create specialized class for vec2, vec3
                 std::vector<double> v(values);
                 assert(v.size() == dimensions); //wrong amount
-                for (int i = 0; i < v.size(); ++i) { m_data[i] = v[i]; }
+                for (int i = 0; i < dimensions; ++i) { m_data[i] = v[i]; }
             }   //{} initialization constructor
+            FixedVector(double x, double y,double z){
+                m_data[0] = x;
+                m_data[1] = y;
+                m_data[2] = z;
+
+            } //3d vector optimized constructor
+            //todo auto vectorization
+            //todo finish docs
+            //todo abs
+            //todo opposite order add for doubles
 
         //SETTER AND GETTERS
             void setValues(std::vector<double> values) {
@@ -236,6 +247,13 @@ namespace TensorMath {
             FixedVector<dimensions> one(1.0);
             return one / *this;
         } //get 1.0/vector. Useful for ray tracing.
+        FixedVector<dimensions>  abs() const {
+            FixedVector<dimensions> out;
+            for (int i = 0; i < dimensions; ++i) {
+                out[i] = std::abs(m_data[i]);
+            }
+            return out;
+        } //absolute value
         FixedVector<dimensions> min(const FixedVector<dimensions> &other) const {
             FixedVector<dimensions> out; //vector to return
             for (int i = 0; i < dimensions; ++i) {

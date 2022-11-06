@@ -6,7 +6,7 @@ Vectors are used to represent a direction or position in N dimensions. Contains 
 If you are looking for constant size vectors, such as Vector3, see _FixedVector_. FixedVector has compile time size compatibility checks, and is easier to copy(to a GPU for example) or serialize.
 
 ### ❗ Notice ❗
-> This class makes assertions for mismatched vector sizes. For maximum performance, define NDEBUG to remove these assertions for your release build.
+> This class makes assertions for mismatched vector sizes and out of bound index. For maximum performance, define NDEBUG to remove these assertions for your release build.
 
 ## Usage
 ### Include
@@ -281,6 +281,12 @@ Returns the unit vector of a vector. A vector with a length of 1 and in the same
 $$\frac{1}{\left\| a \right\|}*a$$
 ```c++ 
       Vector normalized() const
+```
+
+#### Absolute Value
+Returns the absolute value vector.
+```c++ 
+      Vector abs() const
 ```
 
 #### Minimum and maximum

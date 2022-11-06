@@ -2,11 +2,11 @@
 Matrices are a 2d grid of values. They are composed of multiple vectors. 
 
 ### ⚠ Warning ⚠
-> These Matrices have their size defined at runtime, and therefore dynamically allocate memory in a pointer.
+> These Matrices have their size defined at runtime, and therefore dynamically allocate memory.
 If you are looking for a constant size Matrices, like Mat4, see _FixedMatrix_. Fixedmatrix has compile time compatibility checks, and is easier copy(to a GPU for example) or serialize.
 
 ### ❗ Notice ❗
-> This class contains assertions for things like mismatched Matrix sizes. Make sure define NDEBUG for max performance and to remove these assertions for your release build.
+> This class contains assertions for mismatched Matrix sizes and out of bounds index. Make sure define NDEBUG for max performance and to remove these assertions for your release build.
 
 ## Usage
 ### Include
@@ -221,128 +221,78 @@ Asserts that matrices are the same size. Copies over values by copying over the 
 ```
 ### Getters
 #### Get a specific component.
-Will get the value of a specific component. Asserts that i < dimensions.
+Get a value at a coordinate. Asserts bounds.
 ```c++ 
-    double getValue(int i) const
+    double getValue(int x, int y) const
+```
+#### Get a specific vector.
+Gets one of the vector components. Gets vertical column based on x value. Assert bounds.
+```c++ 
+    Vector getColumn(int x)const
+```
+#### Get a specific row.
+Gets one of the vector components. Gets horizontal row based on y value. Assert bounds. Slower than column.
+```c++ 
+    Vector getRow(int y)const
 ```
 
-#### Named Components
-Calls getValue using a common name.
-```c++ 
-    double x() const { return getValue(0); }
-    double y() const { return getValue(1); }
-    double z() const { return getValue(2); }
-    double w() const { return getValue(3); }
-```
 #### operator []
-Calls getValue.
+Calls getColumn.
 ```c++ 
-    double operator[](int i) const
+    Vector operator[](int x) const
 ```
 #### Get dimensions
-Return the number of dimensions(components) the vector has.
+Return the number of x and y double components
 ```c++ 
-    int getDim() const
+    int getHeight() const
+    int getWidth() const
 ```
 ### Comparison
-> Note: The epsilon is used in the formula abs(a-b)<epsilon, to make sure double values are properly compared. std::numeric_limits<double>::epsilon()*10 was found to work for all tested operations.
->
-> More Info: https://embeddeduse.com/2019/08/26/qt-compare-two-floats/
-#### Compare to scalar
-Check if all components of the vector are equal to the scalar value,using an epsilon value for reliable floating point comparison.
+> Note: See vector comparison for more details on how comparison works,
+
+#### Compare to Matrix
+Checks whether they have the same size. Then compares all corresponding vector components.
 ```c++ 
-    bool equals(const Vector &other, double epsilon = std::numeric_limits<double>::epsilon()*10)
-```
-#### Compare to Vector
-Checks whether they have the same size. Then checks if all components are equal, using an epsilon value for reliable floating point comparison.
-```c++ 
-    bool equals(const Vector &other, double epsilon = std::numeric_limits<double>::epsilon()*10)
+    bool equals(const Matrix& other, double epsilon  = std::numeric_limits<double>::epsilon()*10) const
 ```
 #### operator ==
-Calls the above methods. Const.
+Calls the above methods. 
 #### operator !=
-Calls the above methods, and returns !that. Const.
+Calls the above methods, and returns !that.
 
 ### Operations
-#### Operator * + - / vector
-All of these operators are the same, other than performing their corresponding operations. They perform the operations component-wise, using standard double operations. Asserts that both vectors are the same size.
+#### Operator + and -
+Perform matrix addition and subtraction by adding or subtracting the corresponding vector components. Asserts matching size.
 ```c++ 
-    Vector operator/(const Vector &other) const
+    Matrix operator + (const Matrix& other) const 
+    Matrix operator - (const Matrix& other) const 
 ```
-#### Operator *= /= +/ -= vector
-All of these operators are the same, other than performing their corresponding operations. They perform the operations component-wise, using standard double operations, then assigns the value to the component of the left vector. Asserts that both vectors are the same size.
+#### Operator *
+Performs matrix multiplication, by taking dot products of the vector components. Asserts that a.width == b.height.
 ```c++ 
-    void operator/=(const Vector &other)
+     Matrix operator * (const Matrix& other)
 ```
-#### Operator * + - / *= /= +/ -= scalar
-Same as above methods, but uses scalar as second value in operations, rather than a vector value.
-> Note: Dividing by 0, using max double value, etc. is undefined behavior. The library will behave as normal double operations do.
-
 ### Utilities
-#### Length
-Returns the length of the vector. This is the magnitude.
 
-$$\left\| a \right\|=\sqrt{x^2+y^2...}$$
-```c++ 
-    double length() const
-```
-#### Dot product
-Asserts that vectors are same size. Combines two vectors into single double value.
-
-$$a\bullet b=ax*bx+ay*by...$$
-```c++ 
-     double dotProduct(const Vector &other) const
-```
-#### Distance
-Asserts that vectors are same size. Returns the distance between two points.
-
-$$\left\| b-a \right\|$$
-```c++ 
-     double distance(const Vector &other) const
-```
-#### Inverse
-Returns the reciprocal of a vector. Useful for ray intersections.
-
-$$\frac{1}{a}$$
-```c++ 
-     Vector inverse() const 
-```
-#### Normalize
-Returns the unit vector of a vector. A vector with a length of 1 and in the same direction as the original. Used for directions.
-
-$$\frac{1}{\left\| a \right\|}*a$$
-```c++ 
-      Vector normalized() const
-```
-
-#### Minimum and maximum
-Asserts that vectors are same size. Returns a new vector containing the smallest or largest components from either vector.
-
-Great for creating bounding boxes.
-```c++ 
-      Vector min(const Vector &other) const
-      Vector max(const Vector &other) const
-```
 #### Resize
-Creates a new vector with size: end-start.
-Copies value over, start inclusive, end not inclusive.
+Creates a new Matrix with specified size
+Copies values over, start inclusive, end not inclusive.
 Extra values will be zero initialized.
-
 ```c++ 
-       Vector resized(int start, int end) const
+       Matrix resized(int w, int h) const
 ```
-#### Reflect
-Asserts that vectors are same size. Reflects a vector over a normal.
 
-$$v-2*\frac{v\bullet n}{n\bullet n}*n$$
-```c++ 
-      Vector reflect(Vector normal) const
-```
 
 #### To String
-Converts Vector to readable string. { x y z w... }
+Converts Matrix to readable string. 
+
+"[1 2 3]
+
+[4 5 6]"
+
+
 Also can be used with std::cout.
 ```c++ 
       std::string toString() const
-      friend auto operator<<(std::ostream &os, Vector const &v) -> std::ostream &
+      friend auto operator<<(std::ostream &os, Matrix const &m) -> std::ostream & {return os << m.toString();} 
 ```

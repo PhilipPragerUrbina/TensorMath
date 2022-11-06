@@ -160,6 +160,11 @@ using namespace TensorMath;
         EXPECT_TRUE(big.resized(0, 4) == bigger);
         EXPECT_TRUE(big.resized(1, 3) == small_offset);
 
+        //abs
+        Vector negative = {0,-1.5,-2};
+        Vector positive = {0, 1.5,2};
+        EXPECT_EQ(negative,positive);
+
         //reflection
         Vector direction = {2.0,1.0};
         Vector normal = {0.0,1.0};

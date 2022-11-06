@@ -170,15 +170,7 @@ namespace TensorMath {
                 return getRow(0); //return first row
             } //convert flat matrix to vector
 
-       // UTILITIES
-       void randomFill(double  min, double  max){
-           for (int x = 0; x < m_width; ++x) {
-               for (int y = 0; y < m_height; ++y) {
-                   double random_value = min + ((double)rand() / RAND_MAX) * (max-min);
-                   setValue(x,y,random_value);
-               }
-           }
-        } //fill the matrix with random floating point values using rand() between two bounds
+
        //todo cuda array helper and cuda version, using and interoperating with cuda math
        Matrix resized(int w, int h) const{
             Matrix new_matrix(w,h); //create new matrix of size

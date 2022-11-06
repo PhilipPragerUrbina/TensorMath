@@ -286,6 +286,13 @@ namespace TensorMath {
                 assert(normal.m_dimensions == m_dimensions); //Not same size vectors
                 return *this - normal * 2.0 * this->dotProduct(normal) / normal.dotProduct(normal) ;
              } //https://en.wikipedia.org/wiki/Reflection_(mathematics) , reflect a vector over a normal
+            Vector abs() const {
+                Vector out(m_dimensions);
+                for (int i = 0; i < m_dimensions; ++i) {
+                    out[i] = std::abs(m_data[i]);
+                }
+                return out;
+            } //absolute value
             //todo rotation
 
         //PRINTING

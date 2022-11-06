@@ -3,7 +3,10 @@
 
 Designed to be a lightweight alternative to libraries like Eigen.
 
-Perfect for small computer graphics, physics, or machine learning projects.
+Usable for small computer graphics, physics, or machine learning projects.
+
+
+
 
 _A little taste:_
 ```c++
@@ -12,7 +15,7 @@ double distance = 3.0;
 //write your code almost like the equation!
 Vector3 ray_position = origin + dir.normalized() * distance;
 ```
->There is a lot more than just this, take a look at  the Docs!  
+>There is a lot more than just this, take a look at the **_Docs_**!  
 
 Components:
 - Matrices
@@ -21,6 +24,8 @@ Components:
 - Constant size matrices(serializable)
 
 
+  All of it is under the TensorMath  namespace.
+
 Features:
 - Header only
 - All the utilities you will ever need
@@ -28,12 +33,16 @@ Features:
 - Documented and tested
 - Clean commented code, easy to modify
 
-Potential Future Features:
-- Some extra goodies for GPU acceleration
-- CUDA version and Cuda math interoperability
-- Tensors(n dimensional matrices)
-- Sparse matrices
-- Templated version(not just doubles)
-- Maximum matrix multiplication optimizations(memory layout, multithreading, chunking, etc)
+  
+> Known Issue:
+>
+ > Subpar performance compared to specialized Vector3 or Vector2 implementations. Due to initializer lists being slow, 
+and the compiler not being able to make as many assumptions about the library due to its generalized nature.
+>
+> _Still a great reference for making more specialized implementations though!_
 
-All of it is under the TensorMath  namespace.
+
+
+
+
+
